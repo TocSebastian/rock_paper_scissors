@@ -1,102 +1,63 @@
 function getComputerChoice(){
-    let random_number = Math.random()
-    if(random_number>0.66){
-      return 'SCISSORS'
-    }else if (random_number > 0.33){
-      return 'PAPER'
-    }else {
-      return 'ROCK'
-    }
+  let random_number = Math.random();
+  if (random_number > 0.66) {
+    return "SCISSORS"
+  }else if (random_number > 0.33){
+    return "PAPER"
+  }else {
+    return "ROCK"
   }
-  
-  // console.log(getComputerChoice())
-  
-  
-function getHumanChoice(){
-    
-    let choice_list = ['ROCK', 'PAPER', 'SCISSORS'];
-    
-    let user_input = prompt("Enter one of the options: Rock, Paper, Scissors");
-  
-    if (!user_input){
-      alert("Invalid input. Please pick one of the options: Rock, Paper, Scissors");
-      return getHumanChoice();
-    }
-  
-    let formatted_input = user_input.trim().toUpperCase();
-  
-    if (choice_list.includes(formatted_input)){
-      return formatted_input;
-    }else{
-      alert("Invalid choice. Please pick one of the options: Rock, Paper, Scissors");
-      return getHumanChoice();
-    }
-    
-  }
-
-function playRound(computer_choice, human_choice){
-
-    console.log(`Human choice is: ${human_choice}`)
-    console.log(`Computer choice is: ${computer_choice}`)
-
-    let game_rules = {
-        'ROCK': {'wins_to': 'SCISSORS',
-                'loses_to': 'PAPER'},
-        'PAPER': {'wins_to': 'ROCK',
-                'loses_to': 'SCISSORS'},
-        'SCISSORS': {'wins_to': 'PAPER',
-                    'loses_to': 'ROCK'}                            
-                    };
-    
-    if (computer_choice === human_choice){
-        return "DRAW";
-    }else if (game_rules[human_choice]['wins_to'] === computer_choice){
-        return "Player";
-    }else {
-        return "Computer";
-    }
-}
-
-
-function playGame(){
-
-    let human_score = 0;
-    let computer_score = 0;
-    let turn_number = 0;
-
-
-    while (turn_number <5){
-
-        let computer_selection = getComputerChoice();
-        let human_selection = getHumanChoice();
-
-        let round_result = playRound(computer_selection, human_selection);
-
-        if (round_result == 'Player'){
-            human_score++;
-        }else if (round_result == 'Computer'){
-            computer_score++;
-        }
-        console.log(`This Round was WON by ${round_result}!`)
-        turn_number++;
-        console.log(`The turn number is ${turn_number}`)
-        }
-
-    console.log(`The final score:\nHuman score: ${human_score}\nComputer score: ${computer_score}`);
-
-    if (human_score === computer_score){
-        console.log('The game is a DRAW!')
-    }else if (human_score > computer_score){
-        console.log('The game is won by PLAYER!')
-    }else if (computer_score > human_score){
-        console.log("The game is won by COMPUTER!")
-    }
-
-    // console.log(`The turn number is ${turn_number}`)
-    
 
 }
 
-// console.log(playRound(computer_choice_tour, human_choice_tour))
+function getWinner(player_choice, computer_choice){
+  if (player_choice == computer_choice){
+    return "DRAW"
+  }
+  else if (player_choice === "ROCK" && computer_choice === "SCISSORS"){
+    return "Player"
+  }else if (player_choice === "PAPER" && computer_choice === "ROCK"){
+    return "Player"
+  }else if (player_choice === "SCISSORS" && computer_choice === "PAPER"){
+    return "Player"
+  }else{
+    return "Computer"
+  }
+}
 
-playGame()
+let player_score_elemnt = document.querySelector("#player_score");
+let computer_score_elemnt = document.querySelector("#computer_score");
+
+let player_score = 0;
+let computer_score = 0;
+
+function updateScore(winner){
+  if (winner === 'Player'){
+    player_score++;
+  }else if (winner === 'Computer'){
+    computer_score++;
+  }
+
+}
+
+function updateScoreboard(){
+  player_score_elemnt.textContent = player_score;
+  computer_score_elemnt.textContent = computer_score;
+
+}
+
+
+const buttons = document.querySelectorAll(".buttons_container button");
+
+buttons.forEach(button => {
+  button.addEventListener('click', function(){
+    const player_choice = button.textContent;
+    console.log(`You clicked ${player_choice}!`)
+    let computer_choice = getComputerChoice()
+    console.log(`Computer choice is ${computer_choice}!`)
+    let winner  = getWinner(player_choice, computer_choice)
+    console.log(`The WINNER is ${winner}!`)
+    updateScore(winner);
+    updateScoreboard();
+  });
+});
